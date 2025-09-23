@@ -55,4 +55,46 @@ class AppointmentModel extends Model
                     ->orderBy('appointments.start_datetime', 'ASC')
                     ->findAll();
     }
+
+
+    public function countByStatus($status)
+    {
+        return $this->where('status', $status)->countAllResults();
+    }
+
+    // Count total appointments
+    public function totalCount()
+    {
+        return $this->countAllResults();
+    }
+
+
+    public function countByStatusAndRange(string $status = null, string $range = 'today')
+{
+    $builder = $this->builder();
+
+    // Filter by range
+    switch ($range) {
+        case 'today':
+            $builder->where('DATE(start_datetime)', date('Y-m-d'));
+            break;
+        case 'week':
+            $builder->where('YEARWEEK(start_datetime, 1)', date('oW'));
+            break;
+        case 'month':
+            $builder->where('MONTH(start_datetime)', date('m'))
+                    ->where('YEAR(start_datetime)', date('Y'));
+            break;
+        case '3months':
+            $builder->where('start_datetime >=', date('Y-m-d H:i:s', strtotime('-3 months')));
+            break;
+    }
+
+    if ($status) {
+        $builder->where('status', $status);
+    }
+
+    return $builder->countAllResults();
+}
+
 }

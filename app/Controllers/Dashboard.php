@@ -14,23 +14,34 @@ class Dashboard extends Controller
         $this->appointmentModel = new AppointmentModel();
     }
 
-    public function index()
-    {
-        $range = $this->request->getGet('range') ?? 'today';
+public function index()
+{
+    $range = $this->request->getGet('range') ?? 'today';
 
-        // Filter appointments based on selected range
-        $appointments = $this->filterAppointments($range);
+    // Filter appointments for table display
+    $appointments = $this->filterAppointments($range);
 
-        $data = [
-            'doctorCount'       => model('DoctorModel')->countAllResults(),
-            'patientCount'      => model('PatientModel')->countAllResults(),
-            'appointmentCount'  => count($appointments),
-            'recentAppointments'=> $appointments,
-            'selectedRange'     => $range
-        ];
+    // Counts filtered by range
+    $pendingCount   = $this->appointmentModel->countByStatusAndRange('scheduled', $range);
+    $completedCount = $this->appointmentModel->countByStatusAndRange('completed', $range);
+    $canceledCount  = $this->appointmentModel->countByStatusAndRange('cancelled', $range);
+    $totalCount     = $this->appointmentModel->countByStatusAndRange(null, $range);
 
-        return view('dashboard/index', $data);
-    }
+    $data = [
+        'doctorCount'       => model('DoctorModel')->countAllResults(),
+        'patientCount'      => model('PatientModel')->countAllResults(),
+        'appointmentCount'  => count($appointments), // for table display
+        'pendingCount'      => $pendingCount,
+        'completedCount'    => $completedCount,
+        'canceledCount'     => $canceledCount,
+        'totalCount'        => $totalCount,
+        'recentAppointments'=> $appointments,
+        'selectedRange'     => $range
+    ];
+
+    return view('dashboard/index', $data);
+}
+
 
  private function filterAppointments(string $range)
 {
