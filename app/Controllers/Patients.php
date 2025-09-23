@@ -3,15 +3,19 @@ namespace App\Controllers;
 
 use App\Models\PatientModel;
 use CodeIgniter\Controller;
+use App\Models\VisitModel;
 
 class Patients extends Controller
 {
     protected $patientModel;
+      protected $visitModel;
 
-    public function __construct()
-    {
-        $this->patientModel = new PatientModel();
-    }
+   public function __construct()
+{
+    $this->patientModel = new PatientModel();
+    $this->visitModel   = new VisitModel();
+}
+  
 
     public function index()
     {
@@ -88,4 +92,27 @@ class Patients extends Controller
         $this->patientModel->delete($id); // Soft delete
         return redirect()->to('/patients')->with('success', 'Patient deleted.');
     }
+
+    /**
+ * Show patient dashboard/profile with visits and trend data
+ */
+public function profile($id)
+{
+    $patient = $this->patientModel->find($id);
+    if (!$patient) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Patient not found");
+    }
+
+    $visitModel = new \App\Models\VisitModel();
+    $visits = $visitModel->getVisitsByPatient($id);
+
+    $data = [
+        'patient' => $patient,
+        'visits'  => $visits
+    ];
+
+    return view('patients/profile', $data);
+}
+
+
 }

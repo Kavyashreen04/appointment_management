@@ -13,7 +13,7 @@
         <?php foreach($patients as $p): ?>
         <tr>
             <td><?= $p['id'] ?></td>
-            <td><?= $p['name'] ?></td>
+            <td><a href="/patients/profile/<?= $p['id'] ?>"><?= esc($p['name']) ?></a></td>
             <td><?= $p['gender'] ?></td>
             <td><?= $p['problem_description'] ?></td>
             <td>

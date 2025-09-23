@@ -40,6 +40,10 @@ $routes->get('doctors/delete/(:num)', 'Doctors::delete/$1');
     $routes->get('patients/edit/(:num)', 'Patients::edit/$1');
     $routes->post('patients/update/(:num)', 'Patients::update/$1');
     $routes->get('patients/delete/(:num)', 'Patients::delete/$1');
+    $routes->get('patients/profile/(:num)', 'Patients::profile/$1');
+
+    $routes->get('patients/profile/(:num)', 'Patients::profile/$1');
+
 
 
   // Appointments
