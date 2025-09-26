@@ -1,17 +1,32 @@
 <?php
 namespace App\Controllers;
 
+use App\Models\PatientHistoryModel;
 use App\Models\PatientModel;
 use CodeIgniter\Controller;
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 class Patients extends Controller
 {
     protected $patientModel;
 
+<<<<<<< Updated upstream
     public function __construct()
     {
         $this->patientModel = new PatientModel();
     }
+=======
+   public function __construct()
+{
+    $this->patientModel = new PatientModel();
+    $this->visitModel = new \App\Models\PatientHistoryModel();
+   
+}
+  
+>>>>>>> Stashed changes
 
     public function index()
     {
@@ -29,6 +44,7 @@ class Patients extends Controller
         $validation = \Config\Services::validation();
         $validation->setRules([
             'name' => 'required|min_length[3]',
+            'age' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[120]',
             'gender' => 'required',
             'problem_description' => 'required'
         ]);
@@ -40,6 +56,7 @@ class Patients extends Controller
 
         $this->patientModel->save([
             'name' => $this->request->getPost('name'),
+            'age' => $this->request->getPost('age'),
             'gender' => $this->request->getPost('gender'),
             'problem_description' => $this->request->getPost('problem_description'),
     'created_by' => session()->get('user')['id']
@@ -60,6 +77,7 @@ class Patients extends Controller
         $validation = \Config\Services::validation();
         $validation->setRules([
             'name' => 'required|min_length[3]',
+             'age' => 'permit_empty|integer|greater_than_equal_to[0]|less_than_equal_to[120]',
             'gender' => 'required',
             'problem_description' => 'required'
         ]);
@@ -70,6 +88,7 @@ class Patients extends Controller
 
         $this->patientModel->update($id, [
             'name' => $this->request->getPost('name'),
+            'age' => $this->request->getPost('age'),    
             'gender' => $this->request->getPost('gender'),
             'problem_description' => $this->request->getPost('problem_description'),
             'updated_by' => session()->get('user')['id']
@@ -88,4 +107,34 @@ class Patients extends Controller
         $this->patientModel->delete($id); // Soft delete
         return redirect()->to('/patients')->with('success', 'Patient deleted.');
     }
+<<<<<<< Updated upstream
+=======
+
+    /**
+ * Show patient dashboard/profile with visits and trend data
+ */
+public function profile($id)
+{
+    $patient = $this->patientModel->find($id);
+    if (!$patient) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Patient not found");
+    }
+
+    // Use PatientHistoryModel to get visits with doctor names
+    $visitModel = new \App\Models\PatientHistoryModel();
+    $visits = $visitModel->getVisitsByPatient($id); // method joins doctors table
+
+    $data = [
+        'patient' => $patient,
+        'visits'  => $visits
+    ];
+
+    return view('patients/profile', $data);
+}
+
+
+
+
+
+>>>>>>> Stashed changes
 }

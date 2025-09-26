@@ -16,6 +16,12 @@
     </div>
 
     <div class="mb-3">
+    <label>Age</label>
+    <input type="number" name="age" class="form-control" min="0" max="120"
+        value="<?= isset($patient) ? $patient['age'] : old('age') ?>">
+</div>
+
+    <div class="mb-3">
         <label>Gender</label>
         <select name="gender" class="form-select" required>
             <option value="">Select Gender</option>

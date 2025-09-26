@@ -6,14 +6,19 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>#</th><th>Name</th><th>Gender</th><th>Problem</th><th>Actions</th>
+            <th>#</th><th>Name</th><th>age</th><th>Gender</th><th>Problem</th><th>Actions</th>
         </tr>
     </thead>
     <tbody>
         <?php foreach($patients as $p): ?>
         <tr>
             <td><?= $p['id'] ?></td>
+<<<<<<< Updated upstream
             <td><?= $p['name'] ?></td>
+=======
+            <td><a href="/patients/profile/<?= $p['id'] ?>"><?= esc($p['name']) ?></a></td>
+              <td><?= $p['age'] ?? '-' ?></td>
+>>>>>>> Stashed changes
             <td><?= $p['gender'] ?></td>
             <td><?= $p['problem_description'] ?></td>
             <td>

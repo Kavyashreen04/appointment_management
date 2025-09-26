@@ -54,9 +54,23 @@ $routes->post('appointments/reschedule/(:num)', 'Appointments::store/$1'); // su
 $routes->get('appointments/delete/(:num)', 'Appointments::delete/$1');
 $routes->get('appointments/markCompleted/(:num)', 'Appointments::markCompleted/$1');
 $routes->get('appointments/export/csv', 'Appointments::exportCSV');
-$routes->get('appointments/complete/(:num)', 'Appointments::markCompleted/$1');
-$routes->get('appointments/cancel/(:num)', 'Appointments::delete/$1');
+
 $routes->get('api/doctors-appointments', 'Appointments::doctorsWithAppointments');
+$routes->get('appointments/complete/(:num)', 'Appointments::completeForm/$1');
+$routes->post('appointments/mark-completed/(:num)', 'Appointments::markCompleted/$1');
+
+
+// Edit / Reschedule (Existing Appointment)
+$routes->get('appointments/create/(:num)', 'Appointments::create/$1');
+
+// Save (Handles both create + update)
+$routes->post('appointments/store', 'Appointments::store');
+
+
+
+// Cancel Appointment
+$routes->get('appointments/delete/(:num)', 'Appointments::delete/$1');
+
 
 
  
